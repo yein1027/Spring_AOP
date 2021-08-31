@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+	
+	<bean id="myorder" class="sample4.OrderImpl" /> 
+	<bean id="bd" class="sample4.BoardImpl" />	
+		
+	<bean id="loginAdvice" class="sample4.Login" />
+	<bean id="logoutAdvice" class="sample4.Logout" />
+	<bean id="daoAdvice" class="sample4.DAO" />
+	<bean id="helloAdvice" class="sample4.Hello" />
+	
+	<aop:config>
+		<aop:aspect ref="helloAdvice" order="1">
+			<aop:before method="hello"
+				pointcut="execution(* sample4.BoardImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="loginAdvice" order="2">
+			<aop:before method="login" 
+				pointcut="execution(* sample4.BoardImpl.*())" />
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="daoAdvice" order="4">
+			<aop:after method="dao"
+				pointcut="execution(* sample4.BoardImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="logoutAdvice" order="3">
+			<aop:after method="logout"
+				pointcut="execution(* sample4.BoardImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!--  -->
+	
+	<aop:config>
+		<aop:aspect ref="helloAdvice" order="1">
+			<aop:before method="hello"
+				pointcut="execution(* sample4.OrderImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="loginAdvice" order="2">
+			<aop:before method="login" 
+				pointcut="execution(* sample4.OrderImpl.*())" />
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="daoAdvice" order="4">
+			<aop:after method="dao"
+				pointcut="execution(* sample4.OrderImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<aop:config>
+		<aop:aspect ref="logoutAdvice" order="3">
+			<aop:after method="logout"
+				pointcut="execution(* sample4.OrderImpl.*())"/>
+		</aop:aspect>
+	</aop:config>
+	
+
+				
+</beans>
+<!-- 
+aop 설정 pom.xml에서 했음. jar 파일 안 넣어도 되게 
+앞에 *은 리턴 타입 설정인데 *이면 리턴 타입 안 가리고 다
+
+실행시켜라 * 패키지.클래스.메서드
+sample4 안에 boardimpl 안에 메서드 모두 가지고 와라
+리턴 타입도 신경 안 쓴다 = *
+
+loginAdvice가 관리하는 method로 login이 있음
+그거를 BoardImpl 안에 있는 어떤 메서드 실행 '전'에 실행시킬 거야
+
+before -> order 작은 숫자가 먼저 
+after -> order 큰 숫자가 먼저
+
+Aop
+관점을 공통과 핵심으로 나눠서 보고, (기능별로 코드 구분)
+핵심 로직과 공통기능을 기준으로 프로그래밍해서 공통 모듈을 여러 코드를 쉽게 적용하게.
+
+aspect => 공통 관심 사항(공통 기능)
+advice => aspect가 수행해야 할 작업 목록
+jointpoint => pointcut 통쨰로 부르는 이름
+
+
+-->
